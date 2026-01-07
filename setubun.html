@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>数値で表を変更</title>
+
+  <style>
+    body {
+      font-size: 16px;
+      padding: 10px;
+      line-height: 1.5;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 10px;
+      font-size: 1.1em;
+    }
+
+    input[type="number"] {
+      width: 100%;
+      padding: 8px;
+      font-size: 1.1em;
+      box-sizing: border-box;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      font-size: 1.2em;
+      margin-top: 10px;
+    }
+
+    table, th, td {
+      border: 1px solid #333;
+      border-collapse: collapse;
+      padding: 8px;
+      text-align: center;
+    }
+
+    .table-wrapper {
+      overflow-x: auto;
+    }
+  </style>
+</head>
+
+
+<body>
+
+<h2>節分予算 ※全体予算と１～３等予算を入力して「更新」ボタンを押すと、４～１５等とはずれ（３５本の1本分）の仮予算が算出されます</h2>
+
+<label>全体予算<input type="number" id="multiplier" value="15000" step="100"></label><br>
+<label>１等予算<input type="number" id="no1" value="3000" step="100"></label><br>
+<label>２等予算<input type="number" id="no2" value="2000" step="100"></label><br>
+<label>３等予算<input type="number" id="no3" value="1000" step="100"></label>
+<button onclick="updateTable()">更新</button>
+
+<div class="table-wrapper">
+<table>
+  <thead>
+    <tr>
+      <th>項目</th><th>値</th><th>項目</th><th>値</th><th>項目</th><th>値</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td>４等</td><td class="value1" data-base=""></td><td>５等</td><td class="value1" data-base=""></td><td>６等</td><td class="value1" data-base=""></td></tr>
+    <tr><td>７等</td><td class="value1" data-base=""></td><td>８等</td><td class="value2" data-base=""></td><td>９等</td><td class="value2" data-base=""></td></tr>
+    <tr><td>10等</td><td class="value2" data-base=""></td><td>11等</td><td class="value2" data-base=""></td><td>12等</td><td class="value3" data-base=""></td></tr>
+    <tr><td>13等</td><td class="value3" data-base=""></td><td>14等</td><td class="value3" data-base=""></td><td>15等</td><td class="value3" data-base=""></td></tr>
+    <tr><td>はずれ</td><td class="value4" data-base=""></td></tr>
+  </tbody>
+</table>
+</div>
+
+<script>
+function updateTable() {
+  const multiplier = parseFloat(document.getElementById('multiplier').value);
+  const no1 = parseFloat(document.getElementById('no1').value);
+  const no2 = parseFloat(document.getElementById('no2').value);
+  const no3 = parseFloat(document.getElementById('no3').value);
+  const cells1 = document.querySelectorAll('.value1');
+  cells1.forEach(cell => {
+    const base = parseFloat(cell.getAttribute('data-base'));
+    const result = (multiplier - no1 - no2 - no3) * 0.0875;
+    cell.textContent = result.toFixed(0) + "円"; // 小数０桁
+  });
+  const cells2 = document.querySelectorAll('.value2');
+  cells2.forEach(cell => {
+    const base = parseFloat(cell.getAttribute('data-base'));
+    const result = (multiplier - no1 - no2 - no3) * 0.05;
+    cell.textContent = result.toFixed(0) + "円"; // 小数０桁
+  });
+
+  const cells3 = document.querySelectorAll('.value3');
+  cells3.forEach(cell => {
+    const base = parseFloat(cell.getAttribute('data-base'));
+    const result = (multiplier - no1 - no2 - no3) * 0.025;
+    cell.textContent = result.toFixed(0) + "円"; // 小数０桁
+  });
+
+  const cells4 = document.querySelectorAll('.value4');
+  cells4.forEach(cell => {
+    const base = parseFloat(cell.getAttribute('data-base'));
+    const result = (multiplier - no1 - no2 - no3) * 0.01;
+    cell.textContent = result.toFixed(0) + "円"; // 小数０桁
+  });
+}
+</script>
+
+</body>
+</html>
